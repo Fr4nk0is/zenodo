@@ -988,6 +988,17 @@ PREVIEWER_PREFERENCE = [
 #: Improve quality of image resampling using better algorithm
 IIIF_RESIZE_RESAMPLE = 'PIL.Image:BICUBIC'
 
+#: IIIF Cache handler
+IIIF_CACHE_HANDLER = 'zenodo.modules.thumbnails.cache:ImageRedisCache'
+
+# Redis URL Cache
+IIIF_CACHE_REDIS_URL = CACHE_REDIS_URL
+
+#: Cache duration
+# 60 seconds * 60 minutes (1 hour) * 24 (24 hours) * 2 (2 days) = 172800 secs
+# 60 seconds * 60 (1 hour) * 24 (1 day) * 2 (2 days)
+IIIF_CACHE_TIME = 60 * 60 * 24 * 2
+
 # OAI-PMH
 # =======
 #: Index to use for the OAI-PMH server.
