@@ -269,7 +269,11 @@ CELERY_BEAT_SCHEDULE = {
             'retry': True,
         }
     },
+    'thumbnail-preprocessing': {
+        'task': 'zenodo.modules.thumbnails.preprocess_thumbnails',
+        'schedule': crontab(minute=0, hour=3),
 
+    }
 }
 
 # Cache

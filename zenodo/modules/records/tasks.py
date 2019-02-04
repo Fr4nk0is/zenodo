@@ -27,6 +27,7 @@
 from __future__ import absolute_import, print_function
 
 from datetime import datetime
+import arrow
 
 from celery import shared_task
 from flask import current_app
@@ -36,6 +37,7 @@ from invenio_indexer.api import RecordIndexer
 from invenio_pidstore.models import PIDStatus
 from invenio_pidstore.providers.datacite import DataCiteProvider
 from invenio_records import Record
+from invenio_search.api import RecordsSearch
 from lxml import etree
 
 from zenodo.modules.records.models import AccessRight
