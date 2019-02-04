@@ -989,6 +989,9 @@ PREVIEWER_PREFERENCE = [
 #: Improve quality of image resampling using better algorithm
 IIIF_RESIZE_RESAMPLE = 'PIL.Image:BICUBIC'
 
+#: IIIF Cache handler
+IIIF_CACHE_HANDLER = 'zenodo.modules.thumbnails.cache:ImageRedisCache'
+
 # OAI-PMH
 # =======
 #: Index to use for the OAI-PMH server.
