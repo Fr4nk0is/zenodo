@@ -59,12 +59,17 @@ def preprocess_thumbnails(community):
     records_files = q.scan()
     for record_files in records_files:
         for object_file in record_files.to_dict()['_files']:
-            import wdb; wdb.set_trace()
             if(object_file['type'] not in ['jpg', 'png', 'tif', 'tiff']):
                 continue
-            size = 250  # flask_iiif doesn't support ! at the moment
+            size = '250,'  # flask_iiif doesn't support ! at the moment
+            # import ipdb; ipdb.set_trace()
             thumbnail = IIIFImageAPI().get(
-                'v2', iiif_image_key(object_file), 'full',
-                size, 0, 'default', object_file['type'])
+                version='v2',
+                uuid=str(iiif_image_key(object_file)),
+                region='full',
+                size=size,
+                rotation='0',
+                quality='default',
+                image_format=str(object_file['type']))
     current_cache.set('last_preprocessing_time',
-                        current_preprocessing_time, timeout=-1)
+                      str(current_preprocessing_time), timeout=-1)

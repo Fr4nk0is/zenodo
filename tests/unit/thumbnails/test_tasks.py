@@ -37,7 +37,8 @@ from pkg_resources import resource_stream
 def test_preprocess_thumbnails(app, db, es, record_with_bucket):
     pid, record = record_with_bucket
     filename = 'test.png'
-    record.files[filename] = resource_stream('zenodo.modules.theme', 'static/img/screenshots/github.png')
+    record.files[filename] = resource_stream('zenodo.modules.theme',
+        'static/img/screenshots/github.png')
     record.files[filename]['type'] = 'png'
     record.commit()
     db.session.commit()
