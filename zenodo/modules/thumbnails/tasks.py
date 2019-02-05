@@ -34,36 +34,37 @@ from flask import current_app
 from invenio_cache import current_cache
 from invenio_indexer.api import RecordIndexer
 from invenio_search.api import RecordsSearch
-from invenio_iiif import iiif_image_key
+from invenio_iiif.utils import iiif_image_key
+from flask_iiif.restful import IIIFImageAPI
 
 
 @shared_task(ignore_result=True)
 def preprocess_thumbnails(community):
     """Schedule the preprocessing of arcadia type of records thumbnails"""
     last_preprocessing_time = current_cache.get('last_preprocessing_time')\
-        or arrow.get(datetime.datetime.min).to('utc')
+        or arrow.get(datetime.min).to('utc')
     current_preprocessing_time = arrow.utcnow()
 
     search = RecordsSearch(index='records')
     q = (search.query({
         "range": {"created": {
-            "gte": last_preprocessing_time,
-            "lt":  current_preprocessing_time
+            "gte": str(last_preprocessing_time),
+            "lt":  str(current_preprocessing_time)
         }}}
     ).filter({
         "term": {
-            "provisional_communities": community
+            "communities": community
         }}
-    ).fields(['_files']))
+    ).source(include=['_files']))
     records_files = q.scan()
     for record_files in records_files:
-        for object_file in records_files:
-            if(object_file['type'] not in ['jpg, png, tif, tiff']):
+        for object_file in record_files.to_dict()['_files']:
+            import wdb; wdb.set_trace()
+            if(object_file['type'] not in ['jpg', 'png', 'tif', 'tiff']):
                 continue
-            size = 250 + ','  # flask_iiif doesn't support ! at the moment
-            thumbnail = IIIFImageAPI.get(
-                'v2', iiif_image_key(object_file),
+            size = 250  # flask_iiif doesn't support ! at the moment
+            thumbnail = IIIFImageAPI().get(
+                'v2', iiif_image_key(object_file), 'full',
                 size, 0, 'default', object_file['type'])
-    
     current_cache.set('last_preprocessing_time',
-                      current_preprocessing_time, timeout=-1)
+                        current_preprocessing_time, timeout=-1)

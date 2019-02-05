@@ -27,9 +27,21 @@
 from __future__ import absolute_import, print_function
 
 from invenio_cache import current_cache
+from invenio_search import current_search
+from invenio_indexer.api import RecordIndexer
+
 from zenodo.modules.thumbnails.tasks import preprocess_thumbnails
+from pkg_resources import resource_stream
 
 
-def test_preprocess_thumbnails(app, db, es):
-    import pdb; pdb.set_trace()
+def test_preprocess_thumbnails(app, db, es, record_with_bucket):
+    pid, record = record_with_bucket
+    filename = 'test.png'
+    record.files[filename] = resource_stream('zenodo.modules.theme', 'static/img/screenshots/github.png')
+    record.files[filename]['type'] = 'png'
+    record.commit()
+    db.session.commit()
+    RecordIndexer().index(record)
+    current_search.flush_and_refresh(index='records')
     preprocess_thumbnails('zenodo')
+    current_cache.get('')
