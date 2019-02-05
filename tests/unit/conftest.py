@@ -78,6 +78,7 @@ from zenodo.modules.github.cli import github
 from zenodo.modules.records.api import ZenodoRecord
 from zenodo.modules.records.models import AccessRight
 from zenodo.modules.records.serializers.bibtex import Bibtex
+from zenodo.modules.thumbnails.cache import ImageRedisCache
 
 
 @pytest.yield_fixture(scope='session')
@@ -1130,3 +1131,11 @@ def g_tester_id(app, db):
     )
     db.session.commit()
     return tester.id
+
+
+@pytest.fixture
+def iiif_cache():
+    """Fixture for iiif chache."""
+    cache = ImageRedisCache()
+    yield cache
+    cache.delete('iiif:identifier1/full/250,/0/default.png')

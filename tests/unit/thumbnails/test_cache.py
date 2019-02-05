@@ -22,31 +22,20 @@
 # waive the privileges and immunities granted to it by virtue of its status
 # as an Intergovernmental Organization or submit itself to any jurisdiction.
 
-"""Implements a Redis cache."""
-
-from __future__ import absolute_import
-
-from flask_iiif.cache.redis import ImageRedisCache as ImageCache
+"""Unit tests for thumbnail caching."""
 
 
-class ImageRedisCache(ImageCache):
-    """Redis image cache."""
+def test_thumbnail_caching(app, iiif_cache):
+    """Test thumbnail cache."""
+    key_250 = 'iiif:identifier1/full/250,/0/default.png'
+    key = 'iiif:identifier2/full/260,/0/default.jpg'
+    value = 'value'
 
-    def __init__(self):
-        """Initialize the cache."""
-        super(ImageRedisCache, self).__init__()
+    # only images with size == (250,) are cached
+    assert iiif_cache.get(key_250) is None
+    iiif_cache.set(key_250, value)
+    assert iiif_cache.get(key_250) == 'value'
 
-    def set(self, key, value, timeout=None):
-        """Cache the object.
-
-        :param key: the object's key
-        :param value: the stored object
-        :type value: `BytesIO` object
-        :param timeout: the cache timeout in seconds
-        """
-        identifier, _, size, _, _ = key.split('/')
-        if size == '250,':
-            timeout = timeout if timeout else self.timeout
-            self.cache.set(key, value, timeout=timeout)
-
-
+    assert iiif_cache.get(key) is None
+    iiif_cache.set(key, value)
+    assert iiif_cache.get(key) is None
