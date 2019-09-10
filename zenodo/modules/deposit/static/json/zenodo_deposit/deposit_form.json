@@ -129,6 +129,10 @@
             "name": "Software documentation"
           },
           {
+            "value": "taxonimictreatment",
+            "name": "Taxonomic Treatment"
+          },
+          {
             "value": "thesis",
             "name": "Thesis"
           },
