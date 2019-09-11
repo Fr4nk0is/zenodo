@@ -166,19 +166,65 @@
 
   {%- for group in record.related_identifiers|groupby('relation') %}
     {%- if loop.first %}
-    <dt>{{ _('Related identifiers') }}:</dt>
+    <dt>{{ _('Related identifiers') }} :</dt>
     {%- endif %}
-    <dd>{{group.grouper|relation_title}}:<br />
+    {% if group.grouper|relation_title == 'Part of' %}
+    <dd><u>{{group.grouper|relation_title}} :<br /></u>
+    {% else %}
+    <dd>{{group.grouper|relation_title}} :<br />
+    {% endif%}
+    <ul style="list-style-type: none; margin-left: -40px;">
     {%- for related_id in group.list %}
       {%- set related_url = related_id.identifier|pid_url(scheme=related_id.scheme) %}
       {%- if related_url %}
-      <a href="{{related_url}}">{{related_id.identifier}}</a>{%- if not loop.last %}, {% endif %}
+      <li><a href="{{related_url}}">{{related_id.identifier}} </a></li>
       {%- else %}
-      <i>{{related_id.identifier}}</i> ({{related_id.scheme|upper}}){%- if not loop.last %}, {% endif %}
+      <i>{{related_id.identifier}}</i> ({{related_id.scheme|upper}})
       {%- endif %}
     {%- endfor %}
+    </ul>
     </dd>
   {%- endfor %}
+
+  {%- if record.custom %}
+    <dt>{{ _('Custom keywords') }}:</dt>
+    <dd>
+    <ul style="list-style-type: none; margin-left: -40px;">
+    {%- for keywords in record.custom %}
+    <div class="label label-default">
+        <a class="label-link" href="#">{{keywords}}</a>
+        <a class="label-external-link" href="https://www.google.fr">
+        <i data-toggle="tooltip" data-title="https://www.google.fr" class="fa fa-fw fa-external-link" data-original-title="" title=""></i></a>
+    </div>
+        <ul style="list-style-type: none; margin-left: -20px;">
+        {%- for keyword in record.custom[keywords] %}
+            <li>{{keyword}}</li>
+        {%- endfor %}
+        </ul>
+    {%- endfor %}
+    </ul>
+    </dd>
+  {%- endif %}
+
+  {%- if record.locations %}
+    <dt>{{ _('Locations') }}:</dt>
+    <dd>
+    <ul style="list-style-type: none; margin-left: -40px;">
+    {%- for location in record.locations %}
+        <li>{{location.place}}: {{location.lat}}, {{location.lon}}</li>
+    {%- endfor %}
+    </ul>
+    </dd>
+  {%- endif %}
+
+  {%- if record.dates %}
+    <dt>{{ _('Dates') }}:</dt>
+    <dd>
+    {%- for date in record.dates %}
+        {{date|format_date_range}}
+    {%- endfor %}
+    </dd>
+  {%- endif %}
 
   {%- if record.alternate_identifiers %}
     <dt>{{ _('Alternate identifiers') }}:</dt>
