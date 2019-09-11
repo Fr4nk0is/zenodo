@@ -60,6 +60,7 @@
   dl {
     margin-bottom: 0;
   }
+  
   dd {
     padding-left: 10px;
     margin-bottom: 4px;
@@ -73,6 +74,9 @@
 
     }
 
+  ul {
+  list-style-type: none;
+  }
     a.label-link {
       color: #fff;
       text-decoration: none;

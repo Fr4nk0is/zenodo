@@ -1403,3 +1403,61 @@ RATELIMIT_STORAGE_URL = CACHE_REDIS_URL
 
 # Error template
 THEME_429_TEMPLATE = "zenodo_errors/429.html"
+
+# Custom metadata
+# ===============
+ZENODO_CUSTOM_METADATA_VOCABULARIES = {
+    'dwc': {
+        '@context': 'http://rs.tdwg.org/dwc/terms/',
+        'attributes': {
+            'scientificNameAuthorship': {
+                'type': 'text',
+                'multiple': False
+            },
+            'kingdom': {
+                'type': 'keyword',
+                'multiple': False
+            },
+            'phylum': {
+                'type': 'keyword',
+                'multiple': False
+            },
+            'order': {
+                'type': 'keyword',
+                'multiple': False
+            },
+            'family': {
+                'type': 'keyword',
+                'multiple': False
+            },
+            'genus': {
+                'type': 'keyword',
+                'multiple': False
+            },
+            'specificEpithet': {
+                'type': 'keyword',
+                'multiple': False
+            },
+            'taxonomicStatus': {
+                'type': 'keyword',
+                'multiple': False
+            },
+            'taxonRank': {
+                'type': 'keyword',
+                'multiple': False
+            },
+            'collectionCode': {
+                'type': 'keyword',
+                'multiple': True
+            },
+            'materialSampleID': {
+                'type': 'keyword',
+                'multiple': True
+            },
+            'typeStatus': {
+                'type': 'keyword',
+                'multiple': True
+            }
+        }
+    }
+}

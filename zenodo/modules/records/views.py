@@ -291,6 +291,17 @@ def citation(record, pid, style=None, ln=None):
             .format(str(record.id)))
         return None
 
+@blueprint.app_template_filter('format_date_range')
+def format_date_range(date):
+    """."""
+    if date.get('start') and date.get('end'):
+        base = 'From {} to {}'.format(date['start'], date['end'])
+    elif date.get('end'):
+        base = 'Until {}'.format(date['end'])
+    elif date.get('start'):
+        base = 'From {}'.format(date['start'])
+    return '{} ({})'.format(base, date['type'])
+
 
 @blueprint.app_template_filter('pid_url')
 def pid_url(identifier, scheme=None, url_scheme='https'):
